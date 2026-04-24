@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宝宝手册</title>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #fdf6ec;
+    --warm: #f5e6cc;
+    --rose: #e8574a;
+    --rose-light: #fce8e6;
+    --gold: #c9933a;
+    --sage: #7a9e7e;
+    --sage-light: #e8f2e9;
+    --muted: #8a7968;
+    --card: #fffdf8;
+    --shadow: rgba(90,60,20,0.12);
+    --danger-bg: #fff0ee;
+    --wish: #7c5cbf;
+    --wish-bg: #f5f0ff;
+    --date: #2a7ab5;
+    --date-bg: #edf6ff;
+    --date-light: #d0eaff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Serif SC', serif;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(201,147,58,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(232,87,74,0.06) 0%, transparent 60%);
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .logo {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: #f5e6cc;
+  }
+  .logo span { color: var(--gold); }
+  .header-sub {
+    font-size: 0.72rem;
+    color: #a09070;
+    letter-spacing: 1px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  /* PERSON TABS */
+  .person-bar-wrap {
+    background: var(--warm);
+    border-bottom: 2px solid rgba(90,60,20,0.1);
+  }
+  .person-bar {
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    max-width: 860px;
+    margin: 0 auto;
+    scrollbar-width: none;
+  }
+  .person-bar::-webkit-scrollbar { display: none; }
+  .person-tab {
+    padding: 12px 18px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-family: 'Quicksand', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .person-tab:hover { color: var(--ink); }
+  .person-tab.active { color: var(--rose); border-bottom-color: var(--rose); }
+  .person-tab .tab-avatar {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose), var(--gold));
+    color: white;
+    font-size: 0.7rem;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .person-tab .tab-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .add-person-tab {
+    padding: 8px 14px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: var(--gold);
+    border: 2px dashed var(--gold);
+    border-radius: 6px;
+    margin-left: 8px;
+    line-height: 1;
+    transition: all 0.2s;
+    background: transparent;
+    font-family: inherit;
+    flex-shrink: 0;
+  }
+  .add-person-tab:hover { background: rgba(201,147,58,0.1); }
+
+  /* MAIN */
+  main { max-width: 860px; margin: 0 auto; padding: 28px 24px 80px; }
+
+  /* PERSON HEADER */
+  .person-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .person-title { display: flex; align-items: center; gap: 16px; }
+
+  /* BIG AVATAR with upload */
+  .avatar-upload-wrap {
+    position: relative;
+    width: 72px; height: 72px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .big-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose), var(--gold));
+    color: white;
+    font-size: 1.8rem;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-weight: 700;
+    overflow: hidden;
+    border: 3px solid white;
+    box-shadow: 0 3px 14px rgba(90,60,20,0.18);
+  }
+  .big-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar-edit-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.4);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 1.1rem;
+  }
+  .avatar-upload-wrap:hover .avatar-edit-overlay { opacity: 1; }
+  #avatarFileInput { display: none; }
+
+  .person-name-block h2 {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.9rem;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .relation-badge {
+    font-size: 0.75rem;
+    background: var(--rose-light);
+    color: var(--rose);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    display: inline-block;
+    margin-top: 4px;
+  }
+  .person-actions { display: flex; gap: 8px; align-items: flex-start; }
+
+  /* BUTTONS */
+  .btn-ghost {
+    background: transparent;
+    border: 1.5px solid rgba(90,60,20,0.2);
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--rose); color: var(--rose); }
+  .btn-danger-ghost {
+    background: transparent;
+    border: 1.5px solid rgba(232,87,74,0.3);
+    color: var(--rose);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .btn-danger-ghost:hover { background: var(--rose-light); }
+  .btn-rose {
+    background: var(--rose); color: white; border: none;
+    border-radius: 8px; padding: 8px 16px; font-size: 0.88rem;
+    cursor: pointer; font-family: 'Quicksand', sans-serif;
+    font-weight: 700; transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-rose:hover { background: #d44030; }
+  .btn-wish {
+    background: var(--wish); color: white; border: none;
+    border-radius: 8px; padding: 8px 18px; font-size: 0.88rem;
+    cursor: pointer; font-family: 'Quicksand', sans-serif;
+    font-weight: 700; transition: all 0.2s; align-self: flex-end;
+  }
+  .btn-wish:hover { background: #6344a8; }
+  .btn-date {
+    background: var(--date); color: white; border: none;
+    border-radius: 8px; padding: 8px 16px; font-size: 0.88rem;
+    cursor: pointer; font-family: 'Quicksand', sans-serif;
+    font-weight: 700; transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-date:hover { background: #1e5f96; }
+  .btn-primary {
+    background: var(--ink); color: var(--paper); border: none;
+    border-radius: 8px; padding: 9px 20px; font-size: 0.9rem;
+    cursor: pointer; font-family: 'Quicksand', sans-serif;
+    font-weight: 700; transition: all 0.2s;
+  }
+  .btn-primary:hover { background: #2d2018; }
+  .btn-save {
+    background: var(--gold); color: var(--ink); border: none;
+    border-radius: 30px; padding: 7px 18px;
+    cursor: pointer; font-family: 'Quicksand', sans-serif;
+    font-weight: 700; font-size: 0.88rem; transition: all 0.2s;
+  }
+  .btn-save:hover { background: #b5832a; }
+
+  /* SECTION CARDS */
+  .section-card {
+    background: var(--card);
+    border: 1.5px solid rgba(90,60,20,0.1);
+    border-radius: 14px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+  .section-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1.5px solid rgba(90,60,20,0.08);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .section-title {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.95rem; font-weight: 700; letter-spacing: 0.5px;
+    font-family: 'Quicksand', sans-serif;
+  }
+  .section-icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .icon-size { background: #fff3cd; }
+  .icon-drink { background: #d4edda; }
+  .icon-danger { background: #fce8e6; }
+  .icon-wish { background: #f0ebff; }
+  .icon-date { background: var(--date-light); }
+  .section-body { padding: 20px; }
+
+  /* SIZE GRID */
+  .size-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .size-field label {
+    display: block; font-size: 0.72rem; color: var(--muted);
+    font-family: 'Quicksand', sans-serif; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px;
+  }
+  .size-field input, .size-field select {
+    width: 100%; background: var(--warm);
+    border: 1.5px solid rgba(90,60,20,0.12); border-radius: 8px;
+    padding: 8px 12px; font-size: 0.9rem; color: var(--ink);
+    font-family: 'Noto Serif SC', serif; outline: none; transition: border-color 0.2s;
+  }
+  .size-field input:focus, .size-field select:focus { border-color: var(--gold); }
+
+  /* DRINK */
+  .drink-builder { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
+  .drink-chip-group { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; min-width: 160px; }
+  .drink-label {
+    font-size: 0.72rem; color: var(--muted); font-family: 'Quicksand', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+    width: 100%; margin-bottom: 2px;
+  }
+  .chip {
+    padding: 5px 12px; border-radius: 20px;
+    border: 1.5px solid rgba(90,60,20,0.15); background: var(--warm);
+    font-size: 0.82rem; cursor: pointer; font-family: 'Quicksand', sans-serif;
+    font-weight: 600; color: var(--muted); transition: all 0.15s; user-select: none;
+  }
+  .chip:hover { border-color: var(--sage); color: var(--sage); }
+  .chip.selected { background: var(--sage); border-color: var(--sage); color: white; }
+  .drink-preview {
+    background: var(--sage-light); border: 1.5px solid var(--sage);
+    border-radius: 10px; padding: 10px 14px; font-size: 0.88rem;
+    color: #3a6b40; font-weight: 600; font-family: 'Quicksand', sans-serif; min-width: 180px;
+  }
+  .drink-preview .label { font-size: 0.68rem; color: var(--sage); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+
+  /* DANGER */
+  .danger-section .section-header { background: linear-gradient(90deg, #fff8f7, var(--card)); }
+  .danger-list { display: flex; flex-direction: column; gap: 8px; }
+  .danger-item {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--danger-bg); border: 1.5px solid rgba(232,87,74,0.2);
+    border-radius: 8px; padding: 10px 14px; animation: fadeIn 0.3s ease;
+  }
+  .danger-emoji { font-size: 1.1rem; }
+  .danger-text { flex: 1; font-size: 0.9rem; color: var(--rose); font-weight: 600; font-family: 'Quicksand', sans-serif; }
+  .danger-sub { font-size: 0.75rem; color: #c44; font-weight: 400; font-family: 'Noto Serif SC', serif; }
+  .danger-del { background: none; border: none; cursor: pointer; color: rgba(232,87,74,0.35); font-size: 1rem; transition: color 0.2s; padding: 2px 6px; }
+  .danger-del:hover { color: var(--rose); }
+
+  /* WISH */
+  .wish-section .section-header { background: linear-gradient(90deg, #faf8ff, var(--card)); }
+  .wish-list { display: flex; flex-direction: column; gap: 10px; }
+  .wish-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--wish-bg); border: 1.5px solid rgba(124,92,191,0.2);
+    border-radius: 10px; padding: 12px 14px; animation: fadeIn 0.3s ease;
+  }
+  .wish-item.checked { opacity: 0.55; }
+  .wish-item.checked .wish-main { text-decoration: line-through; }
+  .wish-star { font-size: 1rem; margin-top: 2px; flex-shrink: 0; cursor: pointer; transition: transform 0.2s; }
+  .wish-star:hover { transform: scale(1.3); }
+  .wish-content { flex: 1; min-width: 0; }
+  .wish-main { font-size: 0.92rem; color: #3d2a7a; font-weight: 600; font-family: 'Quicksand', sans-serif; word-break: break-all; }
+  .wish-meta { font-size: 0.72rem; color: #9c84c4; margin-top: 3px; font-family: 'Quicksand', sans-serif; }
+  .wish-context { font-size: 0.82rem; color: #6b5490; margin-top: 4px; font-style: italic; font-family: 'Noto Serif SC', serif; }
+  .wish-del { background: none; border: none; cursor: pointer; color: rgba(124,92,191,0.3); font-size: 1rem; transition: color 0.2s; padding: 2px; }
+  .wish-del:hover { color: var(--wish); }
+  .add-wish-form {
+    margin-top: 14px; background: white;
+    border: 1.5px dashed rgba(124,92,191,0.35); border-radius: 10px;
+    padding: 14px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .add-wish-form input {
+    background: var(--wish-bg); border: 1.5px solid rgba(124,92,191,0.15);
+    border-radius: 8px; padding: 8px 12px; font-size: 0.88rem;
+    font-family: 'Noto Serif SC', serif; color: var(--ink); outline: none; width: 100%;
+  }
+  .add-wish-form input:focus { border-color: var(--wish); }
+
+  /* IMPORTANT DATES */
+  .date-section .section-header { background: linear-gradient(90deg, #f0f7ff, var(--card)); }
+  .date-list { display: flex; flex-direction: column; gap: 10px; }
+  .date-item {
+    display: flex; align-items: center; gap: 12px;
+    border-radius: 10px; padding: 12px 16px;
+    animation: fadeIn 0.3s ease;
+    border: 1.5px solid rgba(42,122,181,0.18);
+    background: var(--date-bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .date-item::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--date);
+    border-radius: 4px 0 0 4px;
+  }
+  .date-item.soon::before { background: var(--rose); }
+  .date-item.today::before { background: var(--gold); }
+  .date-calendar {
+    text-align: center; min-width: 46px;
+    background: white; border-radius: 8px;
+    padding: 5px 8px;
+    border: 1.5px solid rgba(42,122,181,0.2);
+    box-shadow: 0 2px 6px rgba(42,122,181,0.08);
+    flex-shrink: 0;
+  }
+  .date-calendar .cal-month { font-size: 0.6rem; color: var(--date); font-family: 'Quicksand', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .date-calendar .cal-day { font-size: 1.3rem; font-weight: 700; color: var(--ink); line-height: 1.1; font-family: 'Quicksand', sans-serif; }
+  .date-content { flex: 1; min-width: 0; }
+  .date-name { font-size: 0.92rem; font-weight: 700; color: #1a3a5e; font-family: 'Quicksand', sans-serif; }
+  .date-sub { font-size: 0.75rem; color: var(--date); margin-top: 2px; font-family: 'Quicksand', sans-serif; }
+  .date-countdown {
+    font-size: 0.72rem; font-weight: 700; padding: 3px 9px;
+    border-radius: 20px; font-family: 'Quicksand', sans-serif;
+    white-space: nowrap;
+    background: rgba(42,122,181,0.1); color: var(--date);
+  }
+  .date-countdown.today-badge { background: #fff3cd; color: #8a6000; }
+  .date-countdown.soon-badge { background: var(--rose-light); color: var(--rose); }
+  .date-del { background: none; border: none; cursor: pointer; color: rgba(42,122,181,0.3); font-size: 1rem; transition: color 0.2s; padding: 2px 4px; }
+  .date-del:hover { color: var(--rose); }
+  .add-date-form {
+    margin-top: 14px; background: white;
+    border: 1.5px dashed rgba(42,122,181,0.3); border-radius: 10px;
+    padding: 14px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .add-date-form input, .add-date-form select {
+    background: var(--date-bg); border: 1.5px solid rgba(42,122,181,0.15);
+    border-radius: 8px; padding: 8px 12px; font-size: 0.88rem;
+    font-family: 'Noto Serif SC', serif; color: var(--ink); outline: none; width: 100%;
+  }
+  .add-date-form input:focus, .add-date-form select:focus { border-color: var(--date); }
+  .add-date-form-row { display: flex; gap: 8px; }
+  .add-date-form-row input, .add-date-form-row select { flex: 1; }
+
+  /* SAVE BAR */
+  .save-bar {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 200; background: var(--ink); color: var(--paper);
+    border-radius: 40px; padding: 12px 28px;
+    display: flex; align-items: center; gap: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    font-family: 'Quicksand', sans-serif; font-size: 0.9rem; font-weight: 600;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s; white-space: nowrap;
+  }
+  .save-bar.visible { opacity: 1; pointer-events: all; }
+
+  /* MODALS */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(20,14,8,0.6); backdrop-filter: blur(4px);
+    z-index: 300; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--card); border-radius: 18px; padding: 28px;
+    width: 90%; max-width: 440px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transform: scale(0.95) translateY(10px); transition: transform 0.25s;
+    max-height: 85vh; overflow-y: auto;
+  }
+  .modal-overlay.open .modal { transform: scale(1) translateY(0); }
+  .modal h3 { font-family: 'Ma Shan Zheng', cursive; font-size: 1.5rem; color: var(--ink); margin-bottom: 6px; }
+  .modal p { font-size: 0.85rem; color: var(--muted); margin-bottom: 18px; font-family: 'Quicksand', sans-serif; }
+  .modal-field { margin-bottom: 14px; }
+  .modal-field label {
+    display: block; font-size: 0.72rem; color: var(--muted);
+    font-family: 'Quicksand', sans-serif; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px;
+  }
+  .modal-field input, .modal-field select {
+    width: 100%; background: var(--warm);
+    border: 1.5px solid rgba(90,60,20,0.15); border-radius: 8px;
+    padding: 10px 14px; font-size: 0.92rem; color: var(--ink);
+    font-family: 'Noto Serif SC', serif; outline: none; transition: border-color 0.2s;
+  }
+  .modal-field input:focus, .modal-field select:focus { border-color: var(--gold); }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+  /* ALLERGY */
+  .allergy-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .allergy-tag {
+    background: #fff3cd; border: 1.5px solid #ffc107;
+    color: #6b4f00; border-radius: 20px; padding: 3px 10px 3px 6px;
+    font-size: 0.78rem; font-family: 'Quicksand', sans-serif; font-weight: 700;
+    display: flex; align-items: center; gap: 5px; animation: fadeIn 0.25s ease;
+  }
+  .allergy-tag .del { cursor: pointer; color: #a07800; font-size: 0.85rem; }
+  .allergy-tag .del:hover { color: var(--rose); }
+  .add-inline-row { display: flex; gap: 8px; }
+  .add-inline-row input {
+    flex: 1; background: white;
+    border: 1.5px dashed rgba(90,60,20,0.25); border-radius: 8px;
+    padding: 7px 12px; font-size: 0.85rem;
+    font-family: 'Noto Serif SC', serif; color: var(--ink); outline: none;
+  }
+  .add-inline-row input:focus { border-color: var(--gold); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; top: 20px; right: 20px;
+    background: #2a1f12; color: #f5e6cc;
+    padding: 12px 20px; border-radius: 10px;
+    font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 0.88rem;
+    z-index: 500; transform: translateX(120%); transition: transform 0.3s ease;
+    max-width: 260px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .toast.show { transform: translateX(0); }
+  .toast.success { border-left: 4px solid var(--sage); }
+  .toast.error { border-left: 4px solid var(--rose); }
+
+  /* EMPTY STATE */
+  .no-person-yet { display: flex; align-items: center; justify-content: center; min-height: 50vh; }
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .empty-state .big-icon { font-size: 3.5rem; margin-bottom: 14px; }
+  .empty-state h3 { font-family: 'Ma Shan Zheng', cursive; font-size: 1.5rem; color: var(--ink); margin-bottom: 8px; }
+  .empty-state p { font-size: 0.88rem; line-height: 1.7; }
+  .btn-start {
+    margin-top: 20px; background: var(--rose); color: white; border: none;
+    border-radius: 30px; padding: 12px 28px; font-size: 0.95rem;
+    cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700;
+    transition: all 0.2s; display: inline-block;
+  }
+  .btn-start:hover { background: #d44030; transform: translateY(-2px); box-shadow: 0 4px 14px rgba(232,87,74,0.35); }
+
+  @keyframes fadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 600px) {
+    .header-inner { padding: 12px 16px; }
+    main { padding: 20px 16px 80px; }
+    .size-grid { grid-template-columns: 1fr 1fr; }
+    .drink-builder { flex-direction: column; }
+    .drink-preview { min-width: unset; }
+    .person-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">宝宝<span>手册</span></div>
+    <div class="header-sub">你的私人作弊条 · 数据本地保存</div>
+  </div>
+</header>
+
+<div class="person-bar-wrap">
+  <div class="person-bar" id="personBar">
+    <button class="add-person-tab" id="addPersonBtn" title="添加新人">＋</button>
+  </div>
+</div>
+
+<main id="mainContent">
+  <div class="no-person-yet" id="emptyState">
+    <div class="empty-state">
+      <div class="big-icon">📖</div>
+      <h3>还没有任何记录</h3>
+      <p>把重要的人加进来吧<br>TA的奶茶偏好、鞋码、雷区和重要日子<br>统统收好，再也不会忘</p>
+      <button class="btn-start" id="emptyAddBtn">＋ 添加第一个宝宝</button>
+    </div>
+  </div>
+  <div id="personView" style="display:none;"></div>
+</main>
+
+<!-- Save bar -->
+<div class="save-bar" id="saveBar">
+  <span>有未保存的更改</span>
+  <button class="btn-save" id="saveBtn">💾 保存</button>
+</div>
+
+<!-- Add Person Modal -->
+<div class="modal-overlay" id="addPersonModal">
+  <div class="modal">
+    <h3>添加新人</h3>
+    <p>把你想记录的宝宝加进来</p>
+    <div class="modal-field">
+      <label>姓名 / 昵称</label>
+      <input type="text" id="newName" placeholder="如：小宝、阿杰、妈妈...">
+    </div>
+    <div class="modal-field">
+      <label>关系</label>
+      <select id="newRelation">
+        <option value="恋人">恋人 💕</option>
+        <option value="朋友">朋友 🫂</option>
+        <option value="家人">家人 👨‍👩‍👧</option>
+        <option value="闺蜜">闺蜜 💅</option>
+        <option value="兄弟">兄弟 🤝</option>
+        <option value="同事">同事 💼</option>
+        <option value="其他">其他</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>备注（选填）</label>
+      <input type="text" id="newNote" placeholder="如：我女朋友、大学室友...">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelAddPerson">取消</button>
+      <button class="btn-primary" id="confirmAddPerson">确认添加</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Danger Modal -->
+<div class="modal-overlay" id="addDangerModal">
+  <div class="modal">
+    <h3>⚠️ 添加雷区</h3>
+    <p>记下TA绝对不能碰的东西</p>
+    <div class="modal-field">
+      <label>雷区名称</label>
+      <input type="text" id="dangerName" placeholder="如：香菜、被人突然抱住、催婚话题...">
+    </div>
+    <div class="modal-field">
+      <label>分类</label>
+      <select id="dangerType">
+        <option value="食物">🥗 食物偏好</option>
+        <option value="过敏">⚠️ 过敏源</option>
+        <option value="行为">🚫 行为禁忌</option>
+        <option value="话题">💬 敏感话题</option>
+        <option value="其他">📌 其他</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>备注（选填）</label>
+      <input type="text" id="dangerNote" placeholder="如：严重过敏会起疹子、会很生气...">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelDanger">取消</button>
+      <button class="btn-rose" id="confirmDanger">确认添加</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Date Modal -->
+<div class="modal-overlay" id="addDateModal">
+  <div class="modal">
+    <h3>📅 添加重要日子</h3>
+    <p>记下那些不能忘的日期</p>
+    <div class="modal-field">
+      <label>日子名称</label>
+      <input type="text" id="dateName" placeholder="如：恋爱纪念日、生日、父母结婚纪念日...">
+    </div>
+    <div class="modal-field">
+      <label>日期</label>
+      <input type="date" id="dateValue">
+    </div>
+    <div class="modal-field">
+      <label>类型</label>
+      <select id="dateType">
+        <option value="纪念日">💕 纪念日</option>
+        <option value="生日">🎂 生日</option>
+        <option value="节日">🎉 节日</option>
+        <option value="约定">📌 约定</option>
+        <option value="其他">🗓 其他</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>是否每年重复</label>
+      <select id="dateRecurring">
+        <option value="1">是（每年提醒）</option>
+        <option value="0">否（仅一次）</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>备注（选填）</label>
+      <input type="text" id="dateNote" placeholder="如：第一次见面的地方、要准备蛋糕...">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelDate">取消</button>
+      <button class="btn-date" id="confirmDate">确认添加</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file input for avatar -->
+<input type="file" id="avatarFileInput" accept="image/*">
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────────────────
+let db = { persons: [] };
+let currentPersonId = null;
+let dirty = false;
+
+const SUGAR_OPTIONS = ['无糖','三分甜','五分甜','七分甜','全糖','少糖'];
+const ICE_OPTIONS = ['去冰','少冰','正常冰','多冰'];
+const TOPPING_OPTIONS = ['波霸','椰果','仙草','布丁','红豆','芋圆','珍珠','燕麦'];
+const SIZE_OPTIONS = ['中杯','大杯','特大杯','小杯'];
+const MONTH_ZH = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+// ─── INIT ─────────────────────────────────────────────────────────────
+function init() {
+  try {
+    const saved = localStorage.getItem('baobao_handbook_db');
+    // migrate old key
+    if (!saved) {
+      const old = localStorage.getItem('partner_survival_db');
+      if (old) db = JSON.parse(old);
+    } else {
+      db = JSON.parse(saved);
+    }
+  } catch(e) {}
+  // ensure dates array exists on all persons
+  db.persons.forEach(p => { if (!p.dates) p.dates = []; });
+  renderTabs();
+  if (db.persons.length > 0) selectPerson(db.persons[0].id);
+}
+
+function save() {
+  localStorage.setItem('baobao_handbook_db', JSON.stringify(db));
+  dirty = false;
+  hideSaveBar();
+  showToast('已保存 ✓', 'success');
+}
+
+function markDirty() { dirty = true; showSaveBar(); }
+function showSaveBar() { document.getElementById('saveBar').classList.add('visible'); }
+function hideSaveBar() { document.getElementById('saveBar').classList.remove('visible'); }
+
+// ─── PERSON ───────────────────────────────────────────────────────────
+function newPerson(name, relation, note) {
+  return {
+    id: Date.now().toString(),
+    name, relation, note,
+    avatar: '',
+    sizes: { clothes:'', shoes:'', ring:'', bra:'', waist:'', height:'' },
+    drink: { sugar:'', ice:'', toppings:[], size:'' },
+    allergies: [],
+    dangers: [],
+    wishes: [],
+    dates: []
+  };
+}
+
+function selectPerson(id) { currentPersonId = id; renderTabs(); renderPersonView(); }
+function getCurrentPerson() { return db.persons.find(p => p.id === currentPersonId); }
+
+// ─── TABS ─────────────────────────────────────────────────────────────
+function renderTabs() {
+  const bar = document.getElementById('personBar');
+  const addBtn = document.getElementById('addPersonBtn');
+  bar.querySelectorAll('.person-tab').forEach(t => t.remove());
+  db.persons.forEach(p => {
+    const tab = document.createElement('div');
+    tab.className = 'person-tab' + (p.id === currentPersonId ? ' active' : '');
+    const avatarHtml = p.avatar
+      ? `<div class="tab-avatar"><img src="${p.avatar}" alt=""></div>`
+      : `<div class="tab-avatar">${p.name[0]}</div>`;
+    tab.innerHTML = `${avatarHtml}${p.name}`;
+    tab.onclick = () => selectPerson(p.id);
+    bar.insertBefore(tab, addBtn);
+  });
+  document.getElementById('emptyState').style.display = db.persons.length === 0 ? 'flex' : 'none';
+  document.getElementById('personView').style.display = db.persons.length === 0 ? 'none' : 'block';
+}
+
+// ─── DATE UTILS ───────────────────────────────────────────────────────
+function parseDateStr(str) {
+  // str = 'YYYY-MM-DD'
+  const [y,m,d] = str.split('-').map(Number);
+  return { y, m, d };
+}
+
+function daysUntil(dateStr, recurring) {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const {y,m,d} = parseDateStr(dateStr);
+  if (!recurring) {
+    const target = new Date(y, m-1, d);
+    target.setHours(0,0,0,0);
+    return Math.round((target - today) / 86400000);
+  }
+  // recurring: find next occurrence this year or next
+  let target = new Date(today.getFullYear(), m-1, d);
+  target.setHours(0,0,0,0);
+  if (target < today) target = new Date(today.getFullYear()+1, m-1, d);
+  return Math.round((target - today) / 86400000);
+}
+
+function formatCountdown(days) {
+  if (days === 0) return { text: '🎉 就是今天！', cls: 'today-badge' };
+  if (days < 0) return { text: `已过 ${Math.abs(days)} 天`, cls: '' };
+  if (days <= 7) return { text: `还有 ${days} 天`, cls: 'soon-badge' };
+  if (days <= 30) return { text: `还有 ${days} 天`, cls: '' };
+  return { text: `还有 ${days} 天`, cls: '' };
+}
+
+function dateTypeEmoji(type) {
+  const m = {'纪念日':'💕','生日':'🎂','节日':'🎉','约定':'📌','其他':'🗓'};
+  return m[type]||'📅';
+}
+
+function sortDates(dates) {
+  return [...dates].sort((a,b) => {
+    const da = daysUntil(a.date, a.recurring==='1'||a.recurring===true);
+    const db2 = daysUntil(b.date, b.recurring==='1'||b.recurring===true);
+    return da - db2;
+  });
+}
+
+// ─── PERSON VIEW ──────────────────────────────────────────────────────
+function renderPersonView() {
+  const p = getCurrentPerson();
+  if (!p) return;
+  const view = document.getElementById('personView');
+
+  function drinkPreview() {
+    const parts = [p.drink.size, p.drink.sugar, p.drink.ice, ...(p.drink.toppings||[]).map(t=>'加'+t)].filter(Boolean);
+    return parts.length ? parts.join('·') : '尚未设置';
+  }
+
+  const allergyTagsHtml = (p.allergies||[]).map(a =>
+    `<div class="allergy-tag">⚠️ ${a} <span class="del" data-allergy="${a}">×</span></div>`
+  ).join('');
+
+  const dangerHtml = (p.dangers||[]).map(d =>
+    `<div class="danger-item">
+      <span class="danger-emoji">${dangerEmoji(d.type)}</span>
+      <div class="danger-text">${escHtml(d.name)}${d.note?`<div class="danger-sub">${escHtml(d.note)}</div>`:''}</div>
+      <button class="danger-del" data-id="${d.id}">🗑</button>
+    </div>`
+  ).join('');
+
+  const wishHtml = (p.wishes||[]).map(w =>
+    `<div class="wish-item${w.checked?' checked':''}">
+      <span class="wish-star" data-wid="${w.id}">${w.checked?'✅':'🌟'}</span>
+      <div class="wish-content">
+        <div class="wish-main">${escHtml(w.item)}</div>
+        ${w.context?`<div class="wish-context">"${escHtml(w.context)}"</div>`:''}
+        <div class="wish-meta">${w.date}${w.place?' · '+escHtml(w.place):''}</div>
+      </div>
+      <button class="wish-del" data-wid="${w.id}">×</button>
+    </div>`
+  ).join('');
+
+  const sortedDates = sortDates(p.dates||[]);
+  const datesHtml = sortedDates.map(dt => {
+    const recurring = dt.recurring==='1'||dt.recurring===true;
+    const days = daysUntil(dt.date, recurring);
+    const cd = formatCountdown(days);
+    const {m, d} = parseDateStr(dt.date);
+    const itemCls = days===0?'today':days>0&&days<=7?'soon':'';
+    return `<div class="date-item ${itemCls}">
+      <div class="date-calendar">
+        <div class="cal-month">${MONTH_ZH[m-1]}</div>
+        <div class="cal-day">${d}</div>
+      </div>
+      <div class="date-content">
+        <div class="date-name">${dateTypeEmoji(dt.type)} ${escHtml(dt.name)}</div>
+        <div class="date-sub">${dt.type}${recurring?' · 每年':''}${dt.note?' · '+escHtml(dt.note):''}</div>
+      </div>
+      <div class="date-countdown ${cd.cls}">${cd.text}</div>
+      <button class="date-del" data-did="${dt.id}">🗑</button>
+    </div>`;
+  }).join('');
+
+  const avatarContent = p.avatar
+    ? `<img src="${p.avatar}" alt="${escHtml(p.name)}">`
+    : p.name[0];
+
+  view.innerHTML = `
+    <div class="person-header">
+      <div class="person-title">
+        <div class="avatar-upload-wrap" id="avatarUploadBtn" title="点击更换照片">
+          <div class="big-avatar" id="bigAvatar">${avatarContent}</div>
+          <div class="avatar-edit-overlay">📷</div>
+        </div>
+        <div class="person-name-block">
+          <h2>${escHtml(p.name)}</h2>
+          <span class="relation-badge">${escHtml(p.relation)}${p.note?' · '+escHtml(p.note):''}</span>
+        </div>
+      </div>
+      <div class="person-actions">
+        <button class="btn-ghost" id="editPersonBtn">✏️ 编辑</button>
+        <button class="btn-danger-ghost" id="deletePersonBtn">删除</button>
+      </div>
+    </div>
+
+    <!-- SIZES -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title"><div class="section-icon icon-size">📐</div>尺码档案</div>
+      </div>
+      <div class="section-body">
+        <div class="size-grid">
+          <div class="size-field"><label>衣服尺码</label><input type="text" id="sz-clothes" value="${escAttr(p.sizes.clothes)}" placeholder="如 M / 165/92A"></div>
+          <div class="size-field"><label>鞋子尺码</label><input type="text" id="sz-shoes" value="${escAttr(p.sizes.shoes)}" placeholder="如 37 / 240mm"></div>
+          <div class="size-field"><label>戒指尺寸</label><input type="text" id="sz-ring" value="${escAttr(p.sizes.ring)}" placeholder="如 13号 / 16mm"></div>
+          <div class="size-field"><label>内衣尺码</label><input type="text" id="sz-bra" value="${escAttr(p.sizes.bra)}" placeholder="如 75B / 32C"></div>
+          <div class="size-field"><label>腰围</label><input type="text" id="sz-waist" value="${escAttr(p.sizes.waist)}" placeholder="如 26寸 / 66cm"></div>
+          <div class="size-field"><label>身高</label><input type="text" id="sz-height" value="${escAttr(p.sizes.height)}" placeholder="如 168cm"></div>
+        </div>
+        <div class="size-field" style="margin-top:14px;">
+          <label>⚠️ 过敏源</label>
+          <div class="allergy-tags" id="allergyTags">${allergyTagsHtml}</div>
+          <div class="add-inline-row">
+            <input type="text" id="allergyInput" placeholder="输入过敏源后按回车，如：芒果、花粉、青霉素">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRINK -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title"><div class="section-icon icon-drink">🧋</div>奶茶暗语</div>
+        <div class="drink-preview">
+          <div class="label">当前配置</div>
+          <div id="drinkPreviewText">${drinkPreview()}</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="drink-builder">
+          <div class="drink-chip-group">
+            <div class="drink-label">甜度</div>
+            ${SUGAR_OPTIONS.map(s=>`<div class="chip${p.drink.sugar===s?' selected':''}" data-type="sugar" data-val="${s}">${s}</div>`).join('')}
+          </div>
+          <div class="drink-chip-group">
+            <div class="drink-label">冰量</div>
+            ${ICE_OPTIONS.map(s=>`<div class="chip${p.drink.ice===s?' selected':''}" data-type="ice" data-val="${s}">${s}</div>`).join('')}
+          </div>
+          <div class="drink-chip-group">
+            <div class="drink-label">杯型</div>
+            ${SIZE_OPTIONS.map(s=>`<div class="chip${p.drink.size===s?' selected':''}" data-type="size" data-val="${s}">${s}</div>`).join('')}
+          </div>
+          <div class="drink-chip-group">
+            <div class="drink-label">加料（可多选）</div>
+            ${TOPPING_OPTIONS.map(s=>`<div class="chip${(p.drink.toppings||[]).includes(s)?' selected':''}" data-type="topping" data-val="${s}">${s}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPORTANT DATES -->
+    <div class="section-card date-section">
+      <div class="section-header">
+        <div class="section-title"><div class="section-icon icon-date">📅</div><span style="color:var(--date)">重要日子</span></div>
+        <button class="btn-date" id="addDateBtn" style="padding:6px 14px;font-size:0.8rem;">＋ 添加日子</button>
+      </div>
+      <div class="section-body">
+        ${sortedDates.length === 0
+          ? `<div style="text-align:center;padding:20px 0;color:var(--muted);font-family:'Quicksand',sans-serif;font-size:0.88rem;">还没有记录重要日子<br>生日、纪念日、约定统统记在这里 🗓</div>`
+          : `<div class="date-list">${datesHtml}</div>`
+        }
+      </div>
+    </div>
+
+    <!-- DANGER ZONE -->
+    <div class="section-card danger-section">
+      <div class="section-header">
+        <div class="section-title"><div class="section-icon icon-danger">🚨</div><span style="color:var(--rose)">雷区警告</span></div>
+        <button class="btn-rose" id="addDangerBtn" style="padding:6px 14px;font-size:0.8rem;">＋ 添加雷区</button>
+      </div>
+      <div class="section-body">
+        ${p.dangers.length === 0
+          ? `<div style="text-align:center;padding:20px 0;color:var(--muted);font-family:'Quicksand',sans-serif;font-size:0.88rem;">还没有记录雷区 — 但不代表没有⚡</div>`
+          : `<div class="danger-list">${dangerHtml}</div>`
+        }
+      </div>
+    </div>
+
+    <!-- WISH POOL -->
+    <div class="section-card wish-section">
+      <div class="section-header">
+        <div class="section-title"><div class="section-icon icon-wish">🌟</div><span style="color:var(--wish)">随口一说许愿池</span></div>
+        <button class="btn-wish" id="toggleWishForm" style="padding:6px 14px;font-size:0.8rem;">＋ 记一条</button>
+      </div>
+      <div class="section-body">
+        <div class="add-wish-form" id="wishForm" style="display:none;">
+          <input type="text" id="wishItem" placeholder="TA说想要的东西，如：那个蓝色小包、剧里同款手链">
+          <input type="text" id="wishContext" placeholder="当时的场景（选填），如：逛街路过橱窗随口说很好看">
+          <input type="text" id="wishPlace" placeholder="在哪里看到（选填），如：南京路某品牌店">
+          <button class="btn-wish" id="submitWish">记下来 ✨</button>
+        </div>
+        ${p.wishes.length === 0
+          ? `<div style="text-align:center;padding:20px 0;color:var(--muted);font-family:'Quicksand',sans-serif;font-size:0.88rem;">许愿池还是空的<br>TA随口说的话，在这里偷偷记住 💜</div>`
+          : `<div class="wish-list">${wishHtml}</div>`
+        }
+      </div>
+    </div>
+  `;
+
+  bindPersonViewEvents();
+}
+
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s) { return String(s||'').replace(/"/g,'&quot;'); }
+
+function dangerEmoji(type) {
+  const m = {'食物':'🥗','过敏':'⚠️','行为':'🚫','话题':'💬','其他':'📌'};
+  return m[type]||'📌';
+}
+
+function updateDrinkPreview() {
+  const p = getCurrentPerson(); if (!p) return;
+  const parts = [p.drink.size, p.drink.sugar, p.drink.ice, ...(p.drink.toppings||[]).map(t=>'加'+t)].filter(Boolean);
+  const el = document.getElementById('drinkPreviewText');
+  if (el) el.textContent = parts.length ? parts.join('·') : '尚未设置';
+}
+
+// ─── BIND EVENTS (called once, uses event delegation) ─────────────────
+function bindPersonViewEvents() {
+  // no-op: all handled by global delegation below
+}
+
+// ─── GLOBAL EVENT DELEGATION ──────────────────────────────────────────
+document.addEventListener('click', e => {
+  const p = getCurrentPerson();
+
+  // Avatar upload
+  if (e.target.closest('#avatarUploadBtn')) {
+    document.getElementById('avatarFileInput').click();
+    return;
+  }
+
+  // Drink chips
+  const chip = e.target.closest('.chip');
+  if (chip && p) {
+    const type = chip.dataset.type, val = chip.dataset.val;
+    if (type === 'topping') {
+      if (!p.drink.toppings) p.drink.toppings = [];
+      const idx = p.drink.toppings.indexOf(val);
+      if (idx === -1) p.drink.toppings.push(val); else p.drink.toppings.splice(idx, 1);
+    } else {
+      p.drink[type] = p.drink[type] === val ? '' : val;
+    }
+    markDirty(); updateDrinkPreview();
+    // re-render just chips
+    document.querySelectorAll(`.chip[data-type="${type}"]`).forEach(c => {
+      const selected = type === 'topping'
+        ? (p.drink.toppings||[]).includes(c.dataset.val)
+        : p.drink[type] === c.dataset.val;
+      c.classList.toggle('selected', selected);
+    });
+    return;
+  }
+
+  // Allergy delete
+  const allergyDel = e.target.closest('.allergy-tag .del');
+  if (allergyDel && p) {
+    p.allergies = p.allergies.filter(x => x !== allergyDel.dataset.allergy);
+    markDirty(); renderPersonView(); return;
+  }
+
+  // Date delete
+  const dateDel = e.target.closest('.date-del');
+  if (dateDel && p) {
+    p.dates = (p.dates||[]).filter(d => d.id !== dateDel.dataset.did);
+    markDirty(); renderPersonView(); return;
+  }
+
+  // Danger delete
+  const dangerDel = e.target.closest('.danger-del');
+  if (dangerDel && p) {
+    p.dangers = p.dangers.filter(d => d.id !== dangerDel.dataset.id);
+    markDirty(); renderPersonView(); return;
+  }
+
+  // Wish star toggle
+  const wishStar = e.target.closest('.wish-star');
+  if (wishStar && p) {
+    const w = p.wishes.find(x => x.id === wishStar.dataset.wid);
+    if (w) { w.checked = !w.checked; markDirty(); renderPersonView(); }
+    return;
+  }
+
+  // Wish delete
+  const wishDel = e.target.closest('.wish-del');
+  if (wishDel && p) {
+    p.wishes = p.wishes.filter(x => x.id !== wishDel.dataset.wid);
+    markDirty(); renderPersonView(); return;
+  }
+
+  // Add date button
+  if (e.target.closest('#addDateBtn')) {
+    document.getElementById('dateName').value = '';
+    document.getElementById('dateValue').value = '';
+    document.getElementById('dateType').value = '纪念日';
+    document.getElementById('dateRecurring').value = '1';
+    document.getElementById('dateNote').value = '';
+    openModal('addDateModal'); return;
+  }
+
+  // Add danger button
+  if (e.target.closest('#addDangerBtn')) {
+    document.getElementById('dangerName').value = '';
+    document.getElementById('dangerNote').value = '';
+    openModal('addDangerModal'); return;
+  }
+
+  // Toggle wish form
+  if (e.target.closest('#toggleWishForm')) {
+    const form = document.getElementById('wishForm');
+    if (form) form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+    return;
+  }
+
+  // Submit wish
+  if (e.target.closest('#submitWish') && p) {
+    const item = document.getElementById('wishItem').value.trim();
+    if (!item) { showToast('请填写许愿内容', 'error'); return; }
+    p.wishes.unshift({
+      id: Date.now().toString(), item,
+      context: document.getElementById('wishContext').value.trim(),
+      place: document.getElementById('wishPlace').value.trim(),
+      date: new Date().toLocaleDateString('zh-CN'), checked: false
+    });
+    markDirty(); renderPersonView(); return;
+  }
+
+  // Edit person
+  if (e.target.closest('#editPersonBtn') && p) {
+    document.getElementById('newName').value = p.name;
+    document.getElementById('newRelation').value = p.relation;
+    document.getElementById('newNote').value = p.note||'';
+    const btn = document.getElementById('confirmAddPerson');
+    btn.dataset.mode = 'edit'; btn.dataset.editId = p.id; btn.textContent = '保存修改';
+    openModal('addPersonModal'); return;
+  }
+
+  // Delete person
+  if (e.target.closest('#deletePersonBtn') && p) {
+    if (confirm(`确定要删除「${p.name}」的所有记录吗？此操作不可撤销。`)) {
+      db.persons = db.persons.filter(x => x.id !== p.id);
+      currentPersonId = db.persons.length > 0 ? db.persons[0].id : null;
+      markDirty(); save(); renderTabs();
+      if (currentPersonId) renderPersonView();
+    }
+    return;
+  }
+});
+
+// Allergy enter key (delegated via keydown)
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const allergyInput = e.target.closest('#allergyInput');
+  if (allergyInput) {
+    const p = getCurrentPerson(); if (!p) return;
+    const val = allergyInput.value.trim();
+    if (val && !p.allergies.includes(val)) { p.allergies.push(val); markDirty(); renderPersonView(); }
+    allergyInput.value = '';
+  }
+});
+
+// Size inputs (delegated via input event)
+document.addEventListener('input', e => {
+  const p = getCurrentPerson(); if (!p) return;
+  const el = e.target;
+  const keys = ['clothes','shoes','ring','bra','waist','height'];
+  for (const key of keys) {
+    if (el.id === 'sz-' + key) { p.sizes[key] = el.value; markDirty(); return; }
+  }
+});
+
+// ─── AVATAR UPLOAD ────────────────────────────────────────────────────
+document.getElementById('avatarFileInput').addEventListener('change', function() {
+  const file = this.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const p = getCurrentPerson(); if (!p) return;
+    // Compress to ~200px
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const size = Math.min(img.width, img.height);
+      canvas.width = 200; canvas.height = 200;
+      const ctx = canvas.getContext('2d');
+      const sx = (img.width - size)/2, sy = (img.height - size)/2;
+      ctx.drawImage(img, sx, sy, size, size, 0, 0, 200, 200);
+      p.avatar = canvas.toDataURL('image/jpeg', 0.82);
+      markDirty(); renderTabs(); renderPersonView();
+      showToast('头像已更新 📷', 'success');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  this.value = '';
+});
+
+// ─── MODALS ───────────────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+document.getElementById('addPersonBtn').addEventListener('click', () => {
+  document.getElementById('newName').value = '';
+  document.getElementById('newRelation').value = '恋人';
+  document.getElementById('newNote').value = '';
+  const btn = document.getElementById('confirmAddPerson');
+  btn.dataset.mode = 'add'; btn.textContent = '确认添加';
+  openModal('addPersonModal');
+});
+document.getElementById('emptyAddBtn').addEventListener('click', () => document.getElementById('addPersonBtn').click());
+
+document.getElementById('cancelAddPerson').addEventListener('click', () => closeModal('addPersonModal'));
+document.getElementById('confirmAddPerson').addEventListener('click', () => {
+  const name = document.getElementById('newName').value.trim();
+  const relation = document.getElementById('newRelation').value;
+  const note = document.getElementById('newNote').value.trim();
+  if (!name) { showToast('姓名不能为空', 'error'); return; }
+  const btn = document.getElementById('confirmAddPerson');
+  if (btn.dataset.mode === 'edit') {
+    const p = db.persons.find(x => x.id === btn.dataset.editId);
+    if (p) { p.name = name; p.relation = relation; p.note = note; }
+    closeModal('addPersonModal'); markDirty(); renderTabs(); renderPersonView();
+  } else {
+    const p = newPerson(name, relation, note);
+    db.persons.push(p); currentPersonId = p.id;
+    closeModal('addPersonModal'); markDirty(); save(); renderTabs(); renderPersonView();
+  }
+});
+
+document.getElementById('cancelDanger').addEventListener('click', () => closeModal('addDangerModal'));
+document.getElementById('confirmDanger').addEventListener('click', () => {
+  const name = document.getElementById('dangerName').value.trim();
+  if (!name) { showToast('请填写雷区名称', 'error'); return; }
+  const p = getCurrentPerson();
+  p.dangers.push({ id: Date.now().toString(), name, type: document.getElementById('dangerType').value, note: document.getElementById('dangerNote').value.trim() });
+  markDirty(); closeModal('addDangerModal'); renderPersonView();
+});
+
+document.getElementById('cancelDate').addEventListener('click', () => closeModal('addDateModal'));
+document.getElementById('confirmDate').addEventListener('click', () => {
+  const name = document.getElementById('dateName').value.trim();
+  const dateVal = document.getElementById('dateValue').value;
+  if (!name) { showToast('请填写日子名称', 'error'); return; }
+  if (!dateVal) { showToast('请选择日期', 'error'); return; }
+  const p = getCurrentPerson();
+  if (!p.dates) p.dates = [];
+  p.dates.push({
+    id: Date.now().toString(), name, date: dateVal,
+    type: document.getElementById('dateType').value,
+    recurring: document.getElementById('dateRecurring').value,
+    note: document.getElementById('dateNote').value.trim()
+  });
+  markDirty(); closeModal('addDateModal'); renderPersonView();
+  showToast('日子已记下 📅', 'success');
+});
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+});
+
+// ─── SAVE ─────────────────────────────────────────────────────────────
+document.getElementById('saveBtn').addEventListener('click', save);
+window.addEventListener('beforeunload', () => { if (dirty) save(); });
+
+// ─── TOAST ────────────────────────────────────────────────────────────
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─── START ────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
